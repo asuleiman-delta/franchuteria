@@ -23,6 +23,7 @@ a{color:#1E1A15;text-decoration:none}
 a:hover{color:#6E5B3E}
 input,textarea{font:inherit}
 ::selection{background:#D9C9AC}
+@keyframes frLoad{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
 @media (min-width:861px){[data-fr-menu],[data-fr-bottombar],[data-fr-catbar]{display:none!important}}
 @media (max-width:860px){
 [data-fr-nav],[data-fr-lang],[data-fr-cta]{display:none!important}
@@ -46,6 +47,12 @@ html.lenis,html.lenis body{height:auto}
 @media (max-width:860px){[data-fr-nav]{visibility:hidden;height:0;overflow:hidden}}
 </style>
 </helmet>
+<div data-fr-loader="" aria-hidden="true" style="position:fixed;inset:0;z-index:100;background:#EEE7DA;display:grid;place-items:center;transition:opacity .7s ease,visibility 0s linear .7s;opacity:{{ loaderOp }};visibility:{{ loaderVis }}">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:28px">
+    <img src="assets/logo-negro.png" alt="" style="width:clamp(140px,18vw,200px);height:auto;display:block">
+    <div style="width:120px;height:1px;background:rgba(30,26,21,.15);overflow:hidden"><div style="height:100%;width:40%;background:#1E1A15;animation:frLoad 1.2s cubic-bezier(.6,0,.3,1) infinite"></div></div>
+  </div>
+</div>
 
 <div style="background:#EEE7DA;min-height:100vh">
   <!-- 01 · barra fija -->
@@ -304,6 +311,10 @@ const POSTS = [
 class Component extends DCLogic {
   state = { now: Date.now(), progress: '0%' };
   componentDidMount() {
+    const t0 = performance.now();
+    const hide = () => setTimeout(() => this.setState({ loaded: true }), Math.max(0, 900 - (performance.now() - t0)));
+    if (document.readyState === 'complete') hide(); else window.addEventListener('load', hide, { once: true });
+    this._lf = setTimeout(() => this.setState({ loaded: true }), 5000);
     const initLenis = () => {
       if (this.lenis || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       if (!window.Lenis) { this._lt = setTimeout(initLenis, 100); return; }
@@ -368,7 +379,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    return { ...this.langVals(), ...this.menuVals(), status: this.status(),
+    return { ...this.langVals(), ...this.menuVals(), loaderOp: this.state.loaded ? 0 : 1, loaderVis: this.state.loaded ? 'hidden' : 'visible', status: this.status(),
       progress: this.state.progress,
       more: POSTS.slice(1, 4) };
   }
