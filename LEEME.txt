@@ -1,0 +1,17 @@
+La Franchutería · sitio estático
+
+Páginas
+- index.html   Landing (hero, carta, la marca, ubicación, contacto, blog, legal)
+- blog.html    Índice del blog
+- articulo.html Artículo de ejemplo
+
+Requisitos
+- Subir la carpeta completa a cualquier hosting estático (Netlify, Vercel, cPanel, S3…). No necesita servidor.
+- support.js es el runtime de las páginas; debe quedar junto a los .html.
+- Se cargan desde CDN: Google Fonts (Schibsted Grotesk, Instrument Serif) y Lenis (smooth scroll).
+
+Pendiente antes de publicar
+- Formulario de contacto: hoy solo muestra el mensaje de confirmación. Conectarlo a un servicio (Formspree, Netlify Forms o backend propio).
+- Textos legales, teléfono y correo del footer.
+- Fotos de productos de la carta y de las entradas del blog sin imagen.
+- Revisión nativa de traducciones (i18n.js) y, para SEO, publicar cada idioma en su propia URL.

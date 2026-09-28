@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
+<script src="./image-slot.js"></script>
+<script src="./reveal.js"></script>
+<script src="./i18n.js"></script>
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+
+<style>
+html{scroll-behavior:auto}
+body{margin:0;background:#EEE7DA;color:#1E1A15;font-family:"Schibsted Grotesk",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#1E1A15;text-decoration:none}
+a:hover{color:#6E5B3E}
+input,textarea{font:inherit}
+::selection{background:#D9C9AC}
+@media (min-width:861px){[data-fr-menu],[data-fr-bottombar],[data-fr-catbar]{display:none!important}}
+@media (max-width:860px){
+[data-fr-nav],[data-fr-lang],[data-fr-cta]{display:none!important}
+[data-fr-burger]{display:grid!important}
+[data-fr-bottombar]{display:flex!important}
+[data-fr-catbar]{display:flex!important}
+header{padding:8px 8px 8px 20px!important;top:12px!important}
+#carta aside{display:none!important}
+body{padding-bottom:88px}
+[data-hero-text] h1{font-size:13vw!important}
+[data-car] > div{flex-basis:86%!important;height:62vh!important}
+[data-screen-label="Legal"]{place-items:end center!important;padding:0!important}
+[data-screen-label="Legal"] [role=dialog]{width:100%!important;max-height:90vh!important;border-radius:28px 28px 0 0!important}
+[data-fr-catbar]::-webkit-scrollbar{display:none}
+}
+[data-car]::-webkit-scrollbar{display:none}
+#contacto input::placeholder,#contacto textarea::placeholder{color:rgba(30,26,21,.28);opacity:1}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+
+@media (max-width:1180px){[data-fr-status]{display:none!important}}
+@media (max-width:860px){[data-fr-nav]{visibility:hidden;height:0;overflow:hidden}}
+</style>
+</helmet>
+
+<div style="background:#EEE7DA">
+
+  <!-- 01 · barra fija -->
+  <header style="position:fixed;top:16px;left:clamp(16px,4vw,56px);right:clamp(16px,4vw,56px);z-index:50;margin:0 auto;max-width:1328px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:10px 12px 10px 24px;border:1px solid rgba(30,26,21,.1);border-radius:999px;background:rgba(238,231,218,.86);backdrop-filter:blur(14px);box-shadow:0 10px 30px rgba(30,26,21,.06)">
+    <a href="#inicio" style="display:flex;align-items:center"><img src="assets/logo-negro.png" alt="La Franchutería · Panadería - Pastelería" style="height:34px;width:auto;display:block"></a>
+    <nav data-fr-nav="" style="display:flex;gap:28px;flex:1;justify-content:center;flex-wrap:nowrap;white-space:nowrap;font-size:16px">
+      <a href="#carta" style-hover="color:#6E5B3E">Carta</a>
+      <a href="#marca" style-hover="color:#6E5B3E">La marca</a>
+      <a href="#ubicacion" style-hover="color:#6E5B3E">Ubicación</a>
+      <a href="#contacto" style-hover="color:#6E5B3E">Contacto</a>
+      <a href="blog.html" style-hover="color:#6E5B3E">Blog</a>
+    </nav>
+    
+    <div data-fr-lang="" style="position:relative">
+      <button onClick="{{ langToggle }}" aria-haspopup="listbox" aria-label="Idioma" style="display:flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid rgba(30,26,21,.14);border-radius:999px;background:transparent;color:#1E1A15;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:rgba(30,26,21,.06)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        <span>{{ langCode }}</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+      <sc-if value="{{ langOpen }}" hint-placeholder-val="{{ false }}">
+        <div role="listbox" style="position:absolute;top:calc(100% + 10px);right:0;min-width:190px;padding:6px;border-radius:20px;background:#F7F3EC;border:1px solid rgba(30,26,21,.08);box-shadow:0 16px 40px rgba(30,26,21,.16);display:flex;flex-direction:column;gap:2px">
+          <sc-for list="{{ langs }}" as="l" hint-placeholder-count="4">
+            <button role="option" onClick="{{ l.go }}" style="display:flex;justify-content:space-between;align-items:center;gap:16px;padding:11px 14px;border:0;border-radius:14px;font-size:15px;text-align:left;cursor:pointer;background:{{ l.bg }};color:{{ l.fg }}" style-hover="background:rgba(30,26,21,.06)">
+              <span>{{ l.name }}</span><span style="font-size:12px;font-weight:600;opacity:.55">{{ l.code }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+    <a data-fr-cta="" href="#carta" style="padding:12px 22px;border-radius:999px;background:#1E1A15;color:#F7F3EC;font-weight:600;font-size:15px" style-hover="background:#6E5B3E;color:#F7F3EC">Ver carta</a>
+    <button data-fr-burger="" onClick="{{ menuToggle }}" aria-label="Menú" aria-expanded="{{ menuOpen }}" style="display:none;margin-left:auto;width:48px;height:48px;border:0;border-radius:50%;background:#1E1A15;color:#F7F3EC;place-items:center;cursor:pointer">
+      <span style="display:flex;flex-direction:column;gap:5px;width:18px">
+        <span style="display:block;height:1.5px;background:currentColor;border-radius:2px;transition:transform .35s cubic-bezier(.2,.7,.2,1);transform:{{ burgerTop }}"></span>
+        <span style="display:block;height:1.5px;background:currentColor;border-radius:2px;transition:transform .35s cubic-bezier(.2,.7,.2,1);transform:{{ burgerBot }}"></span>
+      </span>
+    </button>
+  </header>
+    <div data-fr-menu="" data-lenis-prevent="" aria-hidden="{{ menuHidden }}" style="position:fixed;inset:0;z-index:45;transform:{{ menuX }};visibility:{{ menuVis }};transition:{{ menuTrans }};will-change:transform;background:#EEE7DA;overflow-y:auto;padding:100px 20px 32px;display:flex;flex-direction:column;gap:32px">
+      <nav style="display:flex;flex-direction:column">
+        <a href="#carta" onClick="{{ menuGo }}" style="transition:opacity .5s ease 120ms,transform .6s cubic-bezier(.2,.7,.2,1) 120ms;opacity:{{ menuItemOp }};transform:{{ menuItemX }};display:flex;align-items:baseline;gap:16px;padding:14px 0;border-bottom:1px solid rgba(30,26,21,.1);color:#1E1A15"><span style="font-size:13px;color:rgba(30,26,21,.45);width:22px">01</span><span style="font-size:clamp(34px,9vw,48px);font-weight:500;letter-spacing:-.03em;line-height:1">Carta</span></a>
+        <a href="#marca" onClick="{{ menuGo }}" style="transition:opacity .5s ease 175ms,transform .6s cubic-bezier(.2,.7,.2,1) 175ms;opacity:{{ menuItemOp }};transform:{{ menuItemX }};display:flex;align-items:baseline;gap:16px;padding:14px 0;border-bottom:1px solid rgba(30,26,21,.1);color:#1E1A15"><span style="font-size:13px;color:rgba(30,26,21,.45);width:22px">02</span><span style="font-size:clamp(34px,9vw,48px);font-weight:500;letter-spacing:-.03em;line-height:1">La marca</span></a>
+        <a href="#ubicacion" onClick="{{ menuGo }}" style="transition:opacity .5s ease 230ms,transform .6s cubic-bezier(.2,.7,.2,1) 230ms;opacity:{{ menuItemOp }};transform:{{ menuItemX }};display:flex;align-items:baseline;gap:16px;padding:14px 0;border-bottom:1px solid rgba(30,26,21,.1);color:#1E1A15"><span style="font-size:13px;color:rgba(30,26,21,.45);width:22px">03</span><span style="font-size:clamp(34px,9vw,48px);font-weight:500;letter-spacing:-.03em;line-height:1">Ubicación</span></a>
+        <a href="#contacto" onClick="{{ menuGo }}" style="transition:opacity .5s ease 285ms,transform .6s cubic-bezier(.2,.7,.2,1) 285ms;opacity:{{ menuItemOp }};transform:{{ menuItemX }};display:flex;align-items:baseline;gap:16px;padding:14px 0;border-bottom:1px solid rgba(30,26,21,.1);color:#1E1A15"><span style="font-size:13px;color:rgba(30,26,21,.45);width:22px">04</span><span style="font-size:clamp(34px,9vw,48px);font-weight:500;letter-spacing:-.03em;line-height:1">Contacto</span></a>
+        <a href="blog.html" onClick="{{ menuGo }}" style="transition:opacity .5s ease 340ms,transform .6s cubic-bezier(.2,.7,.2,1) 340ms;opacity:{{ menuItemOp }};transform:{{ menuItemX }};display:flex;align-items:baseline;gap:16px;padding:14px 0;border-bottom:1px solid rgba(30,26,21,.1);color:#1E1A15"><span style="font-size:13px;color:rgba(30,26,21,.45);width:22px">05</span><span style="font-size:clamp(34px,9vw,48px);font-weight:500;letter-spacing:-.03em;line-height:1">Blog</span></a>
+      </nav>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <p style="margin:0;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(30,26,21,.55)">Idioma</p>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:4px;border-radius:999px;background:rgba(30,26,21,.07)">
+          <sc-for list="{{ langs }}" as="l" hint-placeholder-count="4">
+            <button onClick="{{ l.go }}" style="padding:12px 0;border:0;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer;background:{{ l.bg }};color:{{ l.fg }}">{{ l.code }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="margin-top:auto;display:flex;flex-direction:column;gap:6px;font-size:15px;line-height:1.5;color:rgba(30,26,21,.65)">
+        <span>Gustavo Le Paige 527B, San Pedro de Atacama</span>
+        <span>Lunes a domingo, 5:00–21:30</span>
+      </div>
+    </div>
+
+  <div data-fr-bottombar="" style="display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:40;gap:8px;padding:6px;border-radius:999px;background:rgba(238,231,218,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(30,26,21,.1);box-shadow:0 12px 30px rgba(30,26,21,.14)">
+    <a href="#carta" onClick="{{ menuGo }}" style="flex:1;display:flex;align-items:center;justify-content:center;gap:10px;height:52px;border-radius:999px;background:#1E1A15;color:#F7F3EC;font-weight:600;font-size:16px">Ver carta <span>→</span></a>
+    <a href="#contacto" onClick="{{ menuGo }}" aria-label="Contacto" style="width:52px;height:52px;flex:none;border-radius:50%;background:#A18B69;color:#1E1A15;display:grid;place-items:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 2.5 1 3 .8 3.6.7.6-.1 1.8-.7 2-1.5.2-.7.2-1.4.2-1.5-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"></path></svg></a>
+  </div>
+
+
+  <!-- 02 · encabezado: hero con scroll -->
+  <section id="inicio" data-screen-label="02 Encabezado" ref="{{ heroRef }}" style="position:relative;height:400vh">
+    <div style="position:sticky;top:0;height:100vh;overflow:hidden;background:#dfe6ee">
+      <div data-hero-bg="" style="position:absolute;inset:0;transform-origin:50% 50%;will-change:transform">
+        <img src="assets/hero-fondo.png" alt="" style="width:100%;height:100%;object-fit:cover;object-position:50% 100%;display:block">
+      </div>
+      <div data-hero-text="" style="position:absolute;left:0;right:0;top:0;padding:0 6vw;will-change:transform">
+        <h1 style="margin:0 auto;text-align:center;font-weight:500;font-size:clamp(34px,6.4vw,112px);line-height:1;letter-spacing:-.035em;color:#1E1A15">
+          <sc-for list="{{ heroLines }}" as="ln" hint-placeholder-count="6"><span style="display:block">
+            <sc-for list="{{ ln }}" as="w" hint-placeholder-count="1"><span style="display:inline-block;margin:0 .11em">
+              <sc-if value="{{ w.it }}" hint-placeholder-val="{{ false }}"><span data-w="" style="display:inline-block;will-change:filter,opacity;font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;letter-spacing:-.01em;font-size:1.22em;line-height:.82">{{ w.t }}</span></sc-if>
+              <sc-if value="{{ w.rom }}" hint-placeholder-val="{{ true }}"><span data-w="" style="display:inline-block;will-change:filter,opacity">{{ w.t }}</span></sc-if>
+            </span></sc-for>
+          </span></sc-for>
+        </h1>
+      </div>
+      <div data-hero-fg="" style="position:absolute;inset:0;transform-origin:50% 50%;will-change:transform;pointer-events:none">
+        <img src="assets/hero-pan.png" alt="Baguette, pan rústico y hogaza de masa madre apilados sobre un paño de lino" style="width:100%;height:100%;object-fit:cover;object-position:50% 100%;display:block">
+      </div>
+      <a href="#bienvenida" data-hero-scroll="" style="position:absolute;right:clamp(16px,2.4vw,40px);bottom:clamp(16px,2.4vw,40px);z-index:5;display:flex;align-items:center;gap:14px;color:#000;font-size:14px;font-weight:600;letter-spacing:.18em">
+        SCROLL
+        <span style="width:56px;height:56px;border-radius:50%;background:#EEE7DA;border:1px solid #000;display:grid;place-items:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m6 9 6 6 6-6"></path></svg></span>
+      </a>
+    </div>
+  </section>
+
+<div style="position:relative;z-index:2;margin-top:-100vh;background:#EEE7DA;border-radius:clamp(28px,3.5vw,48px) clamp(28px,3.5vw,48px) 0 0;box-shadow:0 -24px 60px rgba(30,26,21,.14);padding:0 clamp(16px,4vw,56px) clamp(16px,2vw,24px)">
+  <main style="max-width:1328px;margin:0 auto">
+
+    <section id="bienvenida" style="padding:clamp(64px,8vw,112px) 0 24px;scroll-margin-top:100px">
+      <div style="display:flex;flex-wrap:wrap;gap:32px 64px;align-items:flex-end;justify-content:space-between">
+        <div style="flex:1 1 520px;min-width:0">
+          <p style="display:flex;align-items:center;gap:10px;margin:0 0 24px;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase"><span style="width:7px;height:7px;border-radius:50%;background:#A18B69"></span>La Franchutería</p>
+          <p style="margin:0;font-size:clamp(22px,2.2vw,32px);line-height:1.3;letter-spacing:-.01em;max-width:680px;text-wrap:pretty">Un rincón de inspiración francesa en San Pedro de Atacama, ven por nuestros baguettes y delicados croissants.</p>
+        </div>
+        <div style="flex:0 1 460px;min-width:0;display:flex;flex-direction:column;gap:20px">
+          
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <a href="#carta" style="display:inline-flex;align-items:center;gap:12px;padding:18px 30px;border-radius:999px;background:#1E1A15;color:#F7F3EC;font-weight:600;font-size:17px" style-hover="background:#6E5B3E;color:#F7F3EC">Ver carta <span>→</span></a>
+            <a href="#ubicacion" style="display:inline-flex;align-items:center;padding:18px 30px;border-radius:999px;border:1px solid rgba(30,26,21,.22);font-weight:600;font-size:17px" style-hover="background:rgba(30,26,21,.06)">Cómo llegar</a>
+          </div>
+          <p style="margin:0;font-size:14px;line-height:1.55;color:rgba(30,26,21,.62)">Terraza al aire libre en un pequeño bosque de chañares · Desayuno y brunch · Gustavo Le Paige 527B.</p>
+        </div>
+      </div>
+      <div style="margin-top:clamp(40px,5vw,64px);position:relative">
+        <div ref="{{ carRef }}" onScroll="{{ carScroll }}" data-car="" data-lenis-prevent-wheel="" style="display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none;border-radius:clamp(24px,3vw,44px)">
+          <sc-for list="{{ slides }}" as="sl" hint-placeholder-count="3">
+            <div style="flex:0 0 min(78%,980px);height:clamp(320px,44vw,620px);scroll-snap-align:start;border-radius:clamp(24px,3vw,44px);overflow:hidden;background:#E3DACA">
+              <div role="img" aria-label="{{ sl.alt }}" style="width:100%;height:100%;background-size:cover;background-position:center;background-image:{{ sl.bg }}"></div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px">
+          <div style="display:flex;gap:8px">
+            <sc-for list="{{ slideDots }}" as="d" hint-placeholder-count="5">
+              <button onClick="{{ d.go }}" aria-label="{{ d.label }}" style="height:8px;border:0;border-radius:999px;padding:0;cursor:pointer;transition:all .3s;width:{{ d.w }};background:{{ d.bg }}"></button>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button onClick="{{ carPrev }}" aria-label="Anterior" style="width:52px;height:52px;border-radius:50%;border:1px solid rgba(30,26,21,.2);background:transparent;color:#1E1A15;cursor:pointer;display:grid;place-items:center" style-hover="background:#1E1A15;color:#F7F3EC"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m15 18-6-6 6-6"></path></svg></button>
+            <button onClick="{{ carNext }}" aria-label="Siguiente" style="width:52px;height:52px;border-radius:50%;border:1px solid rgba(30,26,21,.2);background:transparent;color:#1E1A15;cursor:pointer;display:grid;place-items:center" style-hover="background:#1E1A15;color:#F7F3EC"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 18 6-6-6-6"></path></svg></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 · carta -->
+    <section id="carta" data-screen-label="03 Carta" style="padding:96px 0 48px;scroll-margin-top:100px">
+      <div style="display:flex;flex-wrap:wrap;gap:32px 64px;align-items:flex-end;margin-bottom:56px">
+        <div style="flex:1 1 560px;min-width:0">
+          <p style="display:flex;align-items:center;gap:10px;margin:0 0 20px;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase"><span style="width:7px;height:7px;border-radius:50%;background:#A18B69"></span>11 categorías · 87 productos · actualizada 00/00/0000</p>
+          <h2 id="carta-title" style="margin:0;font-weight:500;font-size:clamp(40px,5.2vw,76px);line-height:1;letter-spacing:-.03em">Carta y <span style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-size:1.16em;line-height:.9">precios</span></h2>
+        </div>
+        <p style="flex:1 1 360px;max-width:520px;margin:0;font-size:17px;line-height:1.6;color:rgba(30,26,21,.68);text-wrap:pretty">Todos los productos están hechos cada noche por nuestras manos y con mucho amor, por lo cual las cantidades son limitadas. ¡Bon appétit!</p>
+      </div>
+
+      <div data-fr-catbar="" style="display:none;position:sticky;top:84px;z-index:5;margin:0 -16px 24px;padding:8px 16px;gap:8px;overflow-x:auto;scrollbar-width:none;background:linear-gradient(180deg,#EEE7DA 70%,rgba(238,231,218,0))">
+        <sc-for list="{{ menu }}" as="cat" hint-placeholder-count="11">
+          <a href="{{ cat.href }}" onClick="{{ cat.go }}" style="flex:none;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;padding:10px 16px;border-radius:999px;border:1px solid rgba(30,26,21,.14);font-size:14px;font-weight:500;background:{{ cat.bg }};color:{{ cat.fg }}">{{ cat.name }}<span style="font-size:11px;opacity:.55">{{ cat.count }}</span></a>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start">
+        <aside style="flex:0 0 232px;position:sticky;top:112px;padding:24px;border-radius:28px;background:#F7F3EC;border:1px solid rgba(30,26,21,.1);">
+          <sc-if value="{{ asideStuck }}" hint-placeholder-val="{{ false }}">
+            <p style="margin:0 0 20px;font-weight:500;font-size:34px;line-height:1;letter-spacing:-.03em">Carta y<br><span style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-size:1.18em;line-height:.85">precios</span></p>
+          </sc-if>
+          <p style="margin:0 0 14px;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(30,26,21,.55)">Categorías</p>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <sc-for list="{{ menu }}" as="cat" hint-placeholder-count="11">
+              <a href="{{ cat.href }}" onClick="{{ cat.go }}" style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;border-radius:12px;font-size:15px;background:{{ cat.bg }};color:{{ cat.fg }}" style-hover="background:rgba(30,26,21,.06)">
+                <span>{{ cat.name }}</span><span style="font-size:12px;opacity:.6">{{ cat.count }}</span>
+              </a>
+            </sc-for>
+          </div>
+        </aside>
+
+        <div style="flex:1 1 560px;min-width:0;display:flex;flex-direction:column;gap:56px">
+          <sc-for list="{{ menu }}" as="cat" hint-placeholder-count="2">
+            <div id="{{ cat.id }}" style="scroll-margin-top:112px">
+              <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(30,26,21,.14)">
+                <h3 style="margin:0;font-weight:500;font-size:32px;letter-spacing:-.02em">{{ cat.name }}</h3>
+                <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;color:#6E5B3E">{{ cat.count }}</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px">
+                <sc-for list="{{ cat.items }}" as="it" hint-placeholder-count="4">
+                  <div style="display:flex;gap:16px;align-items:center;padding:12px 18px 12px 12px;border-radius:24px;background:#F7F3EC;border:1px solid rgba(30,26,21,.1);">
+                    <div style="flex:0 0 72px;height:72px;border-radius:16px;background:repeating-linear-gradient(135deg,#E6DDCC 0 6px,#EDE5D6 6px 12px)"></div>
+                    <div style="flex:1;min-width:0">
+                      <div style="display:flex;justify-content:space-between;gap:12px;align-items:baseline">
+                        <span style="font-size:17px;font-weight:500;line-height:1.25">{{ it.n }}</span>
+                        <span style="font-size:16px;font-weight:600;white-space:nowrap">{{ it.p }}</span>
+                      </div>
+                      <sc-if value="{{ it.d }}" hint-placeholder-val="{{ false }}">
+                        <p style="margin:4px 0 0;font-size:13px;line-height:1.45;color:rgba(30,26,21,.6)">{{ it.d }}</p>
+                      </sc-if>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 · la marca -->
+    <section id="marca" data-screen-label="04 La marca" style="margin-top:72px;padding:clamp(32px,5vw,72px);border-radius:clamp(28px,3.5vw,48px);background:#1E1A15;color:#EEE7DA;scroll-margin-top:100px">
+      <div style="display:flex;flex-wrap:wrap;gap:48px 64px;align-items:stretch">
+        <div style="flex:1 1 480px;min-width:0;display:flex;flex-direction:column;justify-content:center">
+          <p style="display:flex;align-items:center;gap:10px;margin:0 0 24px;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase"><span style="width:7px;height:7px;border-radius:50%;background:#A18B69"></span>La marca</p>
+          <h2 style="margin:0 0 36px;font-weight:500;font-size:clamp(36px,4.4vw,64px);line-height:1.02;letter-spacing:-.03em;text-wrap:balance">Conoce la historia de Arthur Becker, <span style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:#C9B38D;font-size:1.16em;line-height:.9">«el franchute»</span></h2>
+          <p style="margin:0 0 18px;font-size:17px;line-height:1.65;color:rgba(238,231,218,.8);max-width:600px;text-wrap:pretty">Arthur Becker es un panadero francés que llegó al desierto de Atacama atraído por su misticismo, su tranquilidad y sus paisajes, y se quedó en San Pedro. Compartió su oficio con la comunidad, y su origen galo y su calidez con vecinos y viajeros le valieron el apodo con que el pueblo lo bautizó: «el franchute». De ahí viene el nombre del local.</p>
+          <p style="margin:0;font-size:17px;line-height:1.65;color:rgba(238,231,218,.8);max-width:600px;text-wrap:pretty">Empezó horneando a pequeña escala, con fermentación lenta y la tradición de la panadería clásica francesa adaptada a la altura y al clima seco del desierto. Eso sigue intacto: masa madre, amasado diario y respeto por los tiempos de reposo, con la misma dedicación de los primeros días.</p>
+        </div>
+        <div style="flex:1 1 420px;min-width:0;min-height:520px;border-radius:32px;overflow:hidden;background:#2B251E">
+          <div ref="{{ arthurRef }}" onMouseEnter="{{ arthurIn }}" onMouseLeave="{{ arthurOut }}" style="position:relative;width:100%;height:100%;min-height:520px;overflow:hidden;cursor:pointer">
+            <img src="assets/arthur-1.png" alt="Arthur Becker sonriendo con un brazo lleno de baguettes" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block;transition:transform .9s cubic-bezier(.2,.7,.2,1);transform:{{ arthurScale }}">
+            <img src="assets/arthur-2.png" alt="Arthur Becker haciendo una mueca con las baguettes" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block;transition:opacity .12s linear,transform .9s cubic-bezier(.2,.7,.2,1);opacity:{{ arthurOp }};transform:{{ arthurScale }}">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 · ubicación y horarios -->
+    <section id="ubicacion" data-screen-label="05 Ubicación" style="padding:120px 0 48px;scroll-margin-top:100px">
+      <div style="display:flex;flex-wrap:wrap;gap:48px 64px;align-items:stretch">
+        <div style="flex:1 1 520px;min-width:0;min-height:460px;border-radius:40px;overflow:hidden;background:#E3DACA">
+          <div data-fr-map="" style="position:relative;width:100%;height:100%;min-height:460px">
+            <a href="https://maps.app.goo.gl/Kzk8mPiUnkj5vjym9" target="_blank" rel="noopener" aria-label="Mapa de La Franchutería. Arrastra para moverte; clic para abrir en Google Maps" ref="{{ mapRef }}" onPointerDown="{{ mapDown }}" onPointerMove="{{ mapMove }}" onPointerUp="{{ mapUp }}" onPointerCancel="{{ mapUp }}" onClick="{{ mapClick }}" onDragStart="{{ mapNoDrag }}" style="position:absolute;inset:0;display:block;overflow:hidden;touch-action:none;cursor:{{ mapCursor }}">
+              <img src="assets/mapa.png" alt="Mapa de San Pedro de Atacama con la ubicación de La Franchutería en Gustavo Le Paige 527B" style="width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block;transition:{{ mapTrans }};transform-origin:50% 50%;transform:{{ mapScale }};user-select:none;-webkit-user-drag:none;pointer-events:none">
+              <span style="position:absolute;left:50%;top:50%;transition:{{ mapTrans }};transform:{{ pinPos }};display:flex;align-items:center;gap:12px;padding:10px 20px 10px 10px;border-radius:999px;background:#1E1A15;box-shadow:0 12px 30px rgba(30,26,21,.3);pointer-events:none">
+                <span style="width:30px;height:30px;border-radius:50%;background:#A18B69;display:grid;place-items:center;color:#1E1A15"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg></span>
+                <img src="assets/logo-blanco.png" alt="La Franchutería" style="height:30px;width:auto;display:block">
+                <span style="position:absolute;left:50%;bottom:-6px;width:14px;height:14px;background:#1E1A15;transform:translateX(-50%) rotate(45deg)"></span>
+              </span>
+            </a>
+            <div style="position:absolute;inset:0;pointer-events:none;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);-webkit-mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,transparent 55%,#000 100%);mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,transparent 55%,#000 100%)"></div>
+            <div style="position:absolute;right:20px;bottom:20px;display:flex;flex-direction:column;border-radius:999px;overflow:hidden;background:#F7F3EC;box-shadow:0 8px 24px rgba(30,26,21,.16)">
+              <button onClick="{{ mapIn }}" aria-label="Acercar" style="width:44px;height:44px;border:0;background:transparent;color:#1E1A15;font-size:20px;cursor:pointer;display:grid;place-items:center" style-hover="background:#1E1A15;color:#F7F3EC">+</button>
+              <span style="height:1px;background:rgba(30,26,21,.1)"></span>
+              <button onClick="{{ mapOut }}" aria-label="Alejar" style="width:44px;height:44px;border:0;background:transparent;color:#1E1A15;font-size:20px;cursor:pointer;display:grid;place-items:center" style-hover="background:#1E1A15;color:#F7F3EC">−</button>
+            </div>
+          </div>
+        </div>
+        <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;justify-content:center">
+          <p style="display:flex;align-items:center;gap:10px;margin:0 0 24px;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase"><span style="width:7px;height:7px;border-radius:50%;background:#A18B69"></span>Ubicación y horarios</p>
+          <h2 style="margin:0 0 24px;font-weight:500;font-size:clamp(36px,4.4vw,64px);line-height:1.02;letter-spacing:-.03em">Cómo llegar y <span style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-size:1.16em;line-height:.9">horarios</span></h2>
+          <p style="margin:0 0 28px;font-size:19px;line-height:1.5">Gustavo Le Paige 527B, San Pedro de Atacama,<br>Región de Antofagasta, Chile.</p>
+          <div style="margin-bottom:40px"><a href="https://maps.app.goo.gl/Kzk8mPiUnkj5vjym9" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:12px;padding:16px 28px;border-radius:999px;border:1px solid rgba(30,26,21,.22);font-weight:600;font-size:16px" style-hover="background:rgba(30,26,21,.06)">Cómo llegar <span>→</span></a></div>
+          <div style="display:flex;flex-direction:column">
+            <div style="display:flex;justify-content:space-between;gap:16px;padding:18px 0;border-top:1px solid rgba(30,26,21,.14)"><span style="font-weight:600">Lunes a domingo</span><span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:20px;color:#6E5B3E">Sin cierre</span></div>
+            <div style="display:flex;justify-content:space-between;gap:16px;padding:18px 0;border-top:1px solid rgba(30,26,21,.14)"><span>Para llevar</span><span style="font-weight:600">5:00–21:30</span></div>
+            <div style="display:flex;justify-content:space-between;gap:16px;padding:18px 0;border-top:1px solid rgba(30,26,21,.14);border-bottom:1px solid rgba(30,26,21,.14)"><span>Para servir en mesa</span><span style="font-weight:600">7:00–20:30</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 · contacto -->
+    <section id="contacto" data-screen-label="06 Contacto" style="margin-top:72px;padding:clamp(28px,4vw,56px);border-radius:clamp(28px,3.5vw,48px);background:#F7F3EC;border:1px solid rgba(30,26,21,.1);scroll-margin-top:100px">
+      <div style="display:flex;flex-wrap:wrap;gap:48px 72px">
+        <div style="flex:1 1 400px;min-width:0;display:flex;flex-direction:column;justify-content:space-between;gap:28px">
+          <div>
+          <p style="display:flex;align-items:center;gap:10px;margin:0 0 24px;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase"><span style="width:7px;height:7px;border-radius:50%;background:#A18B69"></span>Contacto</p>
+          <h2 style="margin:0 0 20px;font-weight:500;font-size:clamp(36px,4.4vw,64px);line-height:1.02;letter-spacing:-.03em">Contacto</h2>
+          <p style="margin:0;font-size:18px;line-height:1.55;color:rgba(30,26,21,.68);max-width:440px">La vía rápida es WhatsApp. El formulario es para lo que no corre prisa.</p>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <a href="#contacto" style="display:inline-flex;align-items:center;gap:10px;padding:16px 26px;border-radius:999px;background:#1E1A15;color:#F7F3EC;font-weight:600;font-size:16px" style-hover="background:#6E5B3E;color:#F7F3EC">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 2.5 1 3 .8 3.6.7.6-.1 1.8-.7 2-1.5.2-.7.2-1.4.2-1.5-.1-.1-.3-.2-.6-.3zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"></path></svg>
+              Escribir por WhatsApp</a>
+            <a href="#contacto" style="display:inline-flex;align-items:center;gap:10px;padding:16px 26px;border-radius:999px;border:1px solid rgba(30,26,21,.22);font-weight:600;font-size:16px" style-hover="background:rgba(30,26,21,.06)">Ver ficha en Google <span>→</span></a>
+          </div>
+        </div>
+        <form onSubmit="{{ onSubmit }}" style="flex:1 1 440px;min-width:0;display:flex;flex-direction:column;gap:26px;padding:clamp(24px,3vw,36px);border-radius:32px;background:#EEE7DA;border:1px solid rgba(30,26,21,.08)">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:26px 32px">
+            <label style="display:block"><span style="display:block;margin:0 0 8px 16px;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(30,26,21,.55)">Nombre</span><input placeholder="Arthur Becker" required="" style="width:100%;padding:14px 16px 14px;border:0;border-bottom:1px solid rgba(30,26,21,.22);background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.15) 100%);font-size:clamp(20px,1.8vw,24px);letter-spacing:-.01em;color:#1E1A15;outline:none;border-radius:14px 14px 0 0;transition:border-color .25s,background .25s" style-focus="border-bottom-color:#1E1A15;background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.28) 100%)"></label>
+            <label style="display:block"><span style="display:block;margin:0 0 8px 16px;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(30,26,21,.55)">Correo o teléfono</span><input placeholder="hola@correo.cl" required="" style="width:100%;padding:14px 16px 14px;border:0;border-bottom:1px solid rgba(30,26,21,.22);background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.15) 100%);font-size:clamp(20px,1.8vw,24px);letter-spacing:-.01em;color:#1E1A15;outline:none;border-radius:14px 14px 0 0;transition:border-color .25s,background .25s" style-focus="border-bottom-color:#1E1A15;background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.28) 100%)"></label>
+          </div>
+          <label style="display:block"><span style="display:block;margin:0 0 8px 16px;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(30,26,21,.55)">Mensaje</span><textarea rows="3" placeholder="Cuéntanos en qué te ayudamos…" required="" style="width:100%;padding:14px 16px 14px;border:0;border-bottom:1px solid rgba(30,26,21,.22);background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.15) 100%);font-size:clamp(20px,1.8vw,24px);letter-spacing:-.01em;color:#1E1A15;outline:none;border-radius:14px 14px 0 0;transition:border-color .25s,background .25s;resize:none;line-height:1.4;font-family:inherit" style-focus="border-bottom-color:#1E1A15;background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.28) 100%)"></textarea></label>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px">
+            <p style="margin:0;font-size:14px;line-height:1.5;color:rgba(30,26,21,.55);max-width:280px">{{ formNote }}</p>
+            <button type="submit" style="display:inline-flex;align-items:center;gap:14px;padding:10px 10px 10px 28px;border:0;border-radius:999px;background:#1E1A15;color:#F7F3EC;font-weight:600;font-size:16px;cursor:pointer" style-hover="background:#6E5B3E">
+              <span>Enviar</span>
+              <span style="width:40px;height:40px;border-radius:50%;background:#A18B69;color:#1E1A15;display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 07 · blog -->
+    <section id="blog" data-screen-label="07 Blog" style="padding:120px 0 64px;scroll-margin-top:100px">
+      <div style="display:flex;flex-wrap:wrap;gap:24px 64px;align-items:flex-end;justify-content:space-between;margin-bottom:48px">
+        <div>
+          <p style="display:flex;align-items:center;gap:10px;margin:0 0 24px;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase"><span style="width:7px;height:7px;border-radius:50%;background:#A18B69"></span>Blog</p>
+          <h2 style="margin:0;font-weight:500;font-size:clamp(36px,4.4vw,64px);line-height:1.02;letter-spacing:-.03em">Del <span style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-size:1.16em;line-height:.9">obrador</span> y del pueblo</h2>
+        </div>
+        <a href="blog.html" style="display:inline-flex;align-items:center;gap:12px;padding:16px 28px;border-radius:999px;border:1px solid rgba(30,26,21,.22);font-weight:600;font-size:16px" style-hover="background:rgba(30,26,21,.06)">Ver todas las entradas del blog <span>→</span></a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px">
+        <sc-for list="{{ posts }}" as="post" hint-placeholder-count="3">
+          <a href="articulo.html" style="display:flex;flex-direction:column;gap:18px;color:#1E1A15">
+            <div style="aspect-ratio:16/9;border-radius:32px;overflow:hidden;background:#E3DACA"><div role="img" aria-label="{{ post.title }}" style="width:100%;height:100%;background-size:cover;background-position:center;background-image:{{ post.bgImg }};transition:transform .9s cubic-bezier(.2,.7,.2,1)" style-hover="transform:scale(1.04)"></div></div>
+            <p style="margin:0;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:rgba(30,26,21,.55)">{{ post.meta }}</p>
+            <h3 style="margin:-6px 0 0;font-weight:500;font-size:26px;line-height:1.15;letter-spacing:-.015em;text-wrap:balance">{{ post.title }}</h3>
+            <p style="margin:0;font-size:16px;line-height:1.55;color:rgba(30,26,21,.65)">Una o dos líneas con la respuesta concreta que busca quien llega desde Google.</p>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+  </main>
+
+  <!-- 08 · pie -->
+  <footer data-screen-label="08 Pie" style="max-width:1328px;margin:24px auto 0;padding:clamp(32px,5vw,72px) clamp(32px,5vw,72px) 32px;border-radius:clamp(28px,3.5vw,48px);background:#1E1A15;color:#EEE7DA">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:48px;padding-bottom:56px">
+      <div>
+        <img src="assets/logo-color.png" alt="La Franchutería" style="width:220px;height:auto;display:block;margin-bottom:24px">
+        <p style="margin:0;font-size:16px;line-height:1.55;color:rgba(238,231,218,.72);max-width:280px">Panadería artesanal francesa en San Pedro de Atacama. ¡Los esperamos!</p>
+      </div>
+      <div>
+        <p style="margin:0 0 16px;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#C9B38D">Contacto</p>
+        <p style="margin:0;font-size:16px;line-height:1.75;color:rgba(238,231,218,.85)">Gustavo Le Paige 527B<br>San Pedro de Atacama, Chile<br>Lunes a domingo, 5:00–21:30<br>+56 0 0000 0000<br>correo@dominio.cl</p>
+      </div>
+      <div>
+        <p style="margin:0 0 16px;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#C9B38D">Sitio</p>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:16px;line-height:1.6">
+          <a href="#carta" style="color:rgba(238,231,218,.85)" style-hover="color:#C9B38D">Carta</a>
+          <a href="#marca" style="color:rgba(238,231,218,.85)" style-hover="color:#C9B38D">La marca</a>
+          <a href="#ubicacion" style="color:rgba(238,231,218,.85)" style-hover="color:#C9B38D">Ubicación</a>
+          <a href="#blog" style="color:rgba(238,231,218,.85)" style-hover="color:#C9B38D">Blog</a>
+        </div>
+      </div>
+      <div>
+        <p style="margin:0 0 16px;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#C9B38D">Redes</p>
+        <div style="display:flex;gap:10px">
+          <a href="#" aria-label="Facebook" style="width:48px;height:48px;border-radius:50%;border:1px solid rgba(238,231,218,.25);display:grid;place-items:center;color:#EEE7DA" style-hover="background:#A18B69;border-color:#A18B69;color:#1E1A15"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14 8.5V6.8c0-.8.2-1.3 1.4-1.3H17V2.3c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.2H8v3.3h2.6V22H14V11.8h2.6l.4-3.3H14z"></path></svg></a>
+          <a href="#" aria-label="Instagram" style="width:48px;height:48px;border-radius:50%;border:1px solid rgba(238,231,218,.25);display:grid;place-items:center;color:#EEE7DA" style-hover="background:#A18B69;border-color:#A18B69;color:#1E1A15"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle></svg></a>
+          <a href="#" aria-label="TikTok" style="width:48px;height:48px;border-radius:50%;border:1px solid rgba(238,231,218,.25);display:grid;place-items:center;color:#EEE7DA" style-hover="background:#A18B69;border-color:#A18B69;color:#1E1A15"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 2h-3.3v13.4a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9.2a6.2 6.2 0 1 0 5.3 6.2V8.7a7.6 7.6 0 0 0 4.4 1.4V6.8A4.4 4.4 0 0 1 16.6 2z"></path></svg></a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px 32px;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid rgba(238,231,218,.14);font-size:14px;color:rgba(238,231,218,.6)">
+      <p style="margin:0">© 2026 La Franchutería. Todos los derechos reservados. Desarrollado por Delta Digital</p>
+      <div style="display:flex;gap:24px">
+        <a href="#terminos" onClick="{{ openTerminos }}" style="color:rgba(238,231,218,.75)" style-hover="color:#C9B38D">Términos</a>
+        <a href="#privacidad" onClick="{{ openPrivacidad }}" style="color:rgba(238,231,218,.75)" style-hover="color:#C9B38D">Privacidad</a>
+        <a href="#cookies" onClick="{{ openCookies }}" style="color:rgba(238,231,218,.75)" style-hover="color:#C9B38D">Cookies</a>
+      </div>
+    </div>
+  </footer>
+
+  <sc-if value="{{ legalOpen }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Legal" onClick="{{ closeLegal }}" style="position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:rgba(30,26,21,.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)">
+      <div role="dialog" aria-modal="true" aria-labelledby="legal-title" onClick="{{ stopProp }}" style="width:min(660px,100%);max-height:min(82vh,760px);display:flex;flex-direction:column;background:#F7F3EC;border-radius:32px;box-shadow:0 30px 80px rgba(30,26,21,.35);overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;padding:28px 28px 0 32px">
+          <h3 id="legal-title" style="margin:0;font-weight:500;font-size:30px;letter-spacing:-.02em">{{ legalTitle }}</h3>
+          <button onClick="{{ closeLegal }}" aria-label="Cerrar" style="width:44px;height:44px;flex:none;border:1px solid rgba(30,26,21,.16);border-radius:50%;background:transparent;font-size:22px;line-height:1;color:#1E1A15;cursor:pointer" style-hover="background:#1E1A15;color:#F7F3EC">×</button>
+        </div>
+        <div style="display:flex;gap:4px;margin:20px 32px 0;padding:4px;border-radius:999px;background:rgba(30,26,21,.07);align-self:flex-start">
+          <sc-for list="{{ legalTabs }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.go }}" style="padding:9px 16px;border:0;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer;background:{{ t.bg }};color:{{ t.fg }}">{{ t.label }}</button>
+          </sc-for>
+        </div>
+        <div data-lenis-prevent="" style="overflow-y:auto;padding:24px 32px 8px;font-size:16px;line-height:1.65;color:rgba(30,26,21,.8)">
+          <p style="margin:0 0 18px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:rgba(30,26,21,.55)">Última actualización 00/00/0000</p>
+          <p style="margin:0 0 16px">Texto legal entregado por el cliente. Párrafos cortos, con subtítulos por sección y la fecha de última actualización al inicio.</p>
+          <p style="margin:0 0 16px">Segundo párrafo de largo realista para ver el alto del cuerpo dentro del pop up y dónde empieza el scroll propio de la capa.</p>
+          <p style="margin:28px 0 10px;font-size:20px;font-weight:500;color:#1E1A15;letter-spacing:-.01em">Subtítulo de sección</p>
+          <p style="margin:0 0 16px">Tercer párrafo. El contenido hace scroll dentro del pop up; la página de fondo queda fija.</p>
+        </div>
+        <div style="display:flex;justify-content:flex-end;padding:16px 28px 24px;border-top:1px solid rgba(30,26,21,.1)">
+          <button onClick="{{ closeLegal }}" style="padding:14px 28px;border:0;border-radius:999px;background:#1E1A15;color:#F7F3EC;font-weight:600;font-size:15px;cursor:pointer" style-hover="background:#6E5B3E">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;estado&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;abierto&quot;,&quot;llevar&quot;,&quot;cerrado&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Estado del local&quot;},&quot;avisoCookies&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Aviso de cookies&quot;}}">
+const MENU = [
+  ['baguettes','Baguettes',[['Natural','$3.000'],['Aceitunas','$4.200'],['Queso de cabra & orégano','$4.400'],['Queso mantecoso','$4.000'],['Higos y Roquefort','$4.500'],['Ajo','$4.000','Sólo fines de semana']]],
+  ['agregados','Agregados',[['Mantequilla de campo','$2.200'],['Palta','$4.200'],['Queso mantecoso','$3.500'],['Queso cabra','$3.500'],['Mermelada','$2.500'],['Paté de campo artesanal','$3.500']]],
+  ['croissants','Croissants',[['Natural','$3.000','Dulce'],['Pain au chocolat','$3.400','Dulce'],['Manjar','$3.400','Dulce'],['Frambuesa y chocolate blanco','$3.800','Dulce'],['Torsado','$3.500','Dulce · Pintado con crema pastelera y chocolate'],['Rollito de canela','$2.800','Dulce · Frosting de queso crema y vainilla'],['Jamón & queso','$4.000','Salado'],['Jamón serrano & parmesano','$4.000','Salado'],['Salmón, queso crema & alcaparras','$4.500','Salado']]],
+  ['empanadas','Empanadas',[['Empanada de queso','$4.000','Sábado, domingo y festivos'],['Empanada de pino','$4.000','Sábado, domingo y festivos']]],
+  ['quiches','Quiches',[['Tocino «Lorraine»','$6.000'],['Cebolla','$6.000'],['Salmón & espinacas','$6.500'],['Tomate & mostaza Dijon','$6.000'],['Champiñón','$6.000'],['4 quesos','$6.000'],['Mechada & queso','$6.000']]],
+  ['eclairs','Éclairs',[['Avellanas','$6.500'],['Café','$5.500'],['Frambuesa','$5.500'],['Tiramisú','$6.500'],['Maracuyá','$6.500'],['Limón rica-rica','$6.500'],['Chocolate','$5.500'],['Pistachos','$6.000']]],
+  ['cafeteria','Cafetería',[['Espresso','$2.800','Un shot de espresso'],['Espresso doble','$3.800','Dos shots de espresso'],['Americano','$3.500','Espresso más agua caliente'],['Americano doble','$4.500','Dos espresso más agua caliente'],['Macchiato','$3.500','Espresso con espuma'],['Macchiato doble','$4.000','Dos espresso con espuma'],['Cortado','$3.500','Espresso con una lágrima de leche caliente'],['Cortado doble','$4.000','Dos espresso con una lágrima de leche caliente'],['Café con leche','$4.500','Espresso con agua más una porción de leche'],['Latte','$4.800','75% leche con un espresso y una fina capa de leche espumada'],['Cappuccino','$4.500','Leche, café y espuma de leche, con un toque de canela o chocolate'],['Flat White','$5.100','Dos espresso y espuma de leche'],['Mocaccino','$5.100','Chocolate caliente, leche, espresso y espuma de leche'],['Té e infusiones','$3.800','Selección de Dammann Frères'],['Chai latte','$4.500','Té chai con leche'],['Chocolate caliente','$4.500'],['Vaso de leche','$2.000'],['Vaso de leche vegetal','$2.800'],['Extra leche entera','$1.000'],['Extra leche sin lactosa','$1.000'],['Extra leche vegetal','$1.500'],['Café descafeinado','$1.500']]],
+  ['bebidas','Bebidas frías',[['Jugo natural','$5.200','Zanahoria, mango de Pica o naranja de Pica (combínalos como quieras)'],['Agua purificada','$2.500','Botella retornable con & sin gas'],['Granizado','$4.900','Sabor limón y maracuyá · Disponible en temporada primavera/verano']]],
+  ['mocktails','Mocktails',[['Mule ahumado','$6.500','Té lapsang ahumado, jugo de limón, agua miel, ginger beer'],['Mule especiado','$6.500','Infusión chai, jugo de limón, agua miel, ginger beer'],['Tropical Ginger','$7.000','Ginger ale, jugo de limón, pulpa de maracuyá, syrup de vainilla'],['Naranja Coffee Tonic','$7.000','Expreso doble, jugo de naranja, agua tónica'],['Mango michelado','$7.000','Cerveza sin alcohol, jugo de limón, jugo de mango, borde con sal y merkén'],['Not Mojito','$7.000','Jugo de limón, goma, agua gasificada, menta. Opción maracuyá'],['Not Bloody Mary','$7.000','Cerveza sin alcohol, jugo de tomate, jugo de limón, salsa inglesa, sal y merkén'],['Cerveza Kunstmann sin alcohol 330cc','$5.500'],['Cerveza Royal sin alcohol 335cc','$5.000'],['Base michelada','$1.800','Jugo de limón, borde de sal y merkén']]],
+  ['pizzas','Pizzas',[['La Serrano Royal','$17.000','Jamón serrano, rúcula, ajos confitados y mix de quesos'],['La Belle Pera','$17.000','Cuatro quesos, pera asada, cremoso balsámico, nueces'],['La Potager','$16.000','Ajos confitados, pimentón asado, champiñón, hojas de albahaca, queso vegano'],['La Toscana','$17.500','Tocino crujiente, cebolla caramelizada, champiñón, pimentón asado, mix de quesos y oliva al pesto'],['La Causeo Nortino','$16.000','Queso de cabra, pasta de aceitunas, tomate cherry asado y cebollín marinado'],['La Margarita','$13.500','Mix de quesos, tomate y albahaca'],['La Pepperoni','$17.500','Mix de quesos y pepperoni']]],
+  ['novedades','Novedades',[['Croissant jamón & queso gratinado','$8.900','Jamón, queso, bechamel y mix de hojas verdes'],['Croissant queso gratinado','$8.900','Queso, bechamel y mix de hojas verdes'],['Quiche con mix de hojas verdes','$8.900','Elige tu sabor'],['Trozo torta Opera','$6.500','Suave bizcocho de almendras y trigo humedecidos en café de especialidad, crema de mantequilla y ganache de chocolate bitter'],['Brioche pastelera','$2.000','Pan dulce francés relleno con crema pastelera y azúcar flor'],['Brioche manjar','$2.000','Pan dulce francés relleno con manjar, un toque de naranja y cristales de azúcar'],['Brioche avellana chocolate','$2.000','Pan dulce francés relleno con praliné de avellana chocolate y nibs de cacao']]]
+];
+const SLIDES = [
+  ['assets/local.jpg', 'Clientes en el mesón de La Franchutería frente a las repisas de baguettes y hogazas'],
+  ['assets/terraza-tarde.jpg', 'Terraza de La Franchutería al atardecer, con mesas entre los chañares iluminados'],
+  ['assets/blog-3.png', 'Terraza de La Franchutería bajo los chañares'],
+  ['assets/blog-1.png', 'Croissants, quiches y baguette sobre tablas de madera'],
+  ['assets/arthur-1.png', 'Arthur Becker con un brazo lleno de baguettes'],
+  ['assets/blog-2.png', 'Pan de aceitunas partido frente al atardecer en el desierto']
+];
+const POSTS = [
+  ['Dónde desayunar en San Pedro de Atacama','blog-1'],
+  ['Cómo cambia el pan a 2.400 metros de altura','blog-2'],
+  ['Horarios de atención en temporada alta','blog-3']
+];
+
+class Component extends DCLogic {
+  state = { active: 'baguettes', cookies: true, sent: false, now: Date.now() };
+  heroRef = React.createRef();
+  arthurRef = React.createRef();
+  arthurFrame() {
+    const el = this.arthurRef.current; if (!el) return;
+    if (!(window.matchMedia('(hover: none)').matches || window.innerWidth < 861)) return;
+    const r = el.getBoundingClientRect(), vh = window.innerHeight;
+    const on = r.top + r.height * 0.5 < vh * 0.55 && r.bottom > vh * 0.15;
+    if (on !== !!this.state.arthurHover) this.setState({ arthurHover: on });
+  }
+  carRef = React.createRef();
+  carGo(i) { const el = this.carRef.current; if (!el) return; const c = el.children[Math.max(0, Math.min(el.children.length - 1, i))]; if (c) el.scrollTo({ left: c.offsetLeft - el.children[0].offsetLeft, behavior: 'smooth' }); }
+  openLegal(k) { this.setState({ legal: k }); if (this.lenis) this.lenis.stop(); document.documentElement.style.overflow = 'hidden'; }
+  closeLegal() { this.setState({ legal: null }); if (this.lenis) this.lenis.start(); document.documentElement.style.overflow = ''; }
+  mapRef = React.createRef();
+  clampMap(z, x, y) {
+    const el = this.mapRef.current; if (!el) return { x: 0, y: 0 };
+    const mx = (z - 1) * el.clientWidth / 2, my = (z - 1) * el.clientHeight / 2;
+    return { x: Math.max(-mx, Math.min(mx, x)), y: Math.max(-my, Math.min(my, y)) };
+  }
+  mapVals() {
+    const z = this.state.mapZoom ?? 1.4, x = this.state.mapX || 0, y = this.state.mapY || 0, drag = !!this.state.mapDrag;
+    const zoomTo = (nz) => this.setState(st => { const cz = st.mapZoom ?? 1.4; const k = nz / cz; const c = this.clampMap(nz, (st.mapX || 0) * k, (st.mapY || 0) * k); return { mapZoom: nz, mapX: c.x, mapY: c.y }; });
+    return {
+      mapScale: 'translate(' + x + 'px,' + y + 'px) scale(' + z + ')',
+      pinPos: 'translate(calc(-50% + ' + x + 'px), calc(-100% - 14px + ' + y + 'px))',
+      mapTrans: drag ? 'none' : 'transform .5s cubic-bezier(.2,.7,.2,1)',
+      mapCursor: drag ? 'grabbing' : 'grab',
+      mapIn: () => zoomTo(Math.min(2.8, +(z + 0.35).toFixed(2))),
+      mapOut: () => zoomTo(Math.max(1, +(z - 0.35).toFixed(2))),
+      mapNoDrag: (e) => e.preventDefault(),
+      mapDown: (e) => { this._md = { sx: e.clientX, sy: e.clientY, x, y, moved: false }; try { e.currentTarget.setPointerCapture(e.pointerId); } catch (_) {} },
+      mapMove: (e) => {
+        const d = this._md; if (!d) return;
+        const dx = e.clientX - d.sx, dy = e.clientY - d.sy;
+        if (!d.moved && Math.hypot(dx, dy) < 4) return;
+        d.moved = true;
+        const c = this.clampMap(this.state.mapZoom ?? 1.4, d.x + dx, d.y + dy);
+        this.setState({ mapX: c.x, mapY: c.y, mapDrag: true });
+      },
+      mapUp: () => { if (this._md) this._mdMoved = this._md.moved; this._md = null; if (this.state.mapDrag) this.setState({ mapDrag: false }); },
+      mapClick: (e) => { if (this._mdMoved) { e.preventDefault(); this._mdMoved = false; } }
+    };
+  }
+  mapRef = React.createRef();
+
+  componentDidMount() {
+    this._onScroll = () => {
+      let cur = MENU[0][0];
+      for (const [id] of MENU) {
+        const el = document.getElementById('cat-' + id);
+        if (el && el.getBoundingClientRect().top < 200) cur = id;
+      }
+      if (cur !== this.state.active) this.setState({ active: cur });
+      const ct = document.getElementById('carta-title');
+      const stuck = !!ct && ct.getBoundingClientRect().bottom < 100;
+      if (stuck !== this.state.asideStuck) this.setState({ asideStuck: stuck });
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._t = setInterval(() => this.setState({ now: Date.now() }), 60000);
+    this._p = null;
+    const initLenis = () => {
+      if (this.lenis || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (!window.Lenis) { this._lt = setTimeout(initLenis, 100); return; }
+      this.lenis = new window.Lenis({ lerp: 0.08, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 1.5, anchors: { offset: -100 } });
+    };
+    initLenis();
+    this._onKey = (e) => { if (e.key === 'Escape' && this.state.legal) this.closeLegal(); };
+    window.addEventListener('keydown', this._onKey);
+    const h = (location.hash || '').slice(1);
+    if (['terminos', 'privacidad', 'cookies'].includes(h)) setTimeout(() => this.openLegal(h), 50);
+
+    const loop = (time) => { if (this.lenis) this.lenis.raf(time); this.heroFrame(); this.arthurFrame(); this._raf = requestAnimationFrame(loop); };
+    this._raf = requestAnimationFrame(loop);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this._onScroll);
+    clearInterval(this._t);
+    cancelAnimationFrame(this._raf);
+    window.removeEventListener('keydown', this._onKey);
+    clearTimeout(this._lt);
+    if (this.lenis) { this.lenis.destroy(); this.lenis = null; }
+  }
+
+  heroFrame() {
+    const sec = this.heroRef.current;
+    if (!sec) return;
+    const vh = window.innerHeight, vw = window.innerWidth;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const r = sec.getBoundingClientRect();
+    const target = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - 2 * vh)));
+    if (this._p === null || reduced) this._p = target;
+    else this._p += (target - this._p) * 0.18;
+    if (Math.abs(target - this._p) < 0.0002) this._p = target;
+    const p = this._p;
+    const bg = sec.querySelector('[data-hero-bg]'), fg = sec.querySelector('[data-hero-fg]');
+    const txt = sec.querySelector('[data-hero-text]'), cue = sec.querySelector('[data-hero-scroll]');
+    const words = sec.querySelectorAll('[data-w]');
+    if (!txt || !words.length) return;
+    const line = Math.max(140, vh * 0.28);
+    if (!this._m || this._m.vw !== vw || this._m.vh !== vh || this._m.n !== words.length) {
+      const h = txt.firstElementChild.offsetHeight;
+      const lh = words[0].offsetHeight;
+      this._m = { vw, vh, n: words.length, start: line - lh / 2, travel: Math.max(0, h - lh) };
+    }
+    const scale = reduced ? 1 : 1 + 0.12 * p;
+    bg.style.transform = `scale(${scale})`;
+    const bgBlur = reduced ? 0 : 4 * p;
+    bg.style.filter = bgBlur > 0.05 ? `blur(${bgBlur.toFixed(2)}px)` : 'none';
+    const fgBlur = reduced ? 0 : 2 * (1 - p);
+    fg.style.filter = fgBlur > 0.05 ? `blur(${fgBlur.toFixed(2)}px)` : 'none';
+    fg.style.transform = `translateY(${reduced ? 0 : 30 * p}px) scale(${scale})`;
+    txt.style.transform = `translateY(${this._m.start - Math.min(1, p / 0.85) * this._m.travel}px)`;
+    if (cue) cue.style.opacity = String(Math.max(0, 1 - Math.max(0, p - 0.85) / 0.15));
+    const wall = sec.querySelector('[data-hero-wall]');
+    if (wall && words[3]) {
+      const wb = words[3].getBoundingClientRect();
+      const dw = ((wb.top + wb.height / 2) - line) / vh;
+      wall.style.opacity = String(Math.min(1, Math.max(0, dw / 0.1)));
+    }
+    const maxBlur = vw < 700 ? 6 : 12;
+    words.forEach((w) => {
+      if (reduced) { w.style.filter = 'none'; w.style.opacity = '1'; return; }
+      const b = w.getBoundingClientRect();
+      const x = (b.left + b.width / 2) / vw - 0.5;
+      const d = ((b.top + b.height / 2) - line) / vh + x * 0.12;
+      let blur = 0, op = 1;
+      if (d > 0) { const t = Math.min(1, d / 0.16); blur = maxBlur * t; op = 1 - t; }
+      else { const t = Math.min(1, -d / 0.34); op = 1 - t; }
+      w.style.filter = blur > 0.05 ? `blur(${blur.toFixed(2)}px)` : 'none';
+      w.style.opacity = op.toFixed(3);
+    });
+  }
+
+  menuVals() {
+    const open = !!this.state.menuOpen;
+    const setOpen = (v) => { this.setState({ menuOpen: v }); if (this.lenis) { v ? this.lenis.stop() : this.lenis.start(); } document.documentElement.style.overflow = v ? 'hidden' : ''; };
+    return {
+      menuOpen: open,
+      menuToggle: () => setOpen(!open),
+      menuGo: (e) => {
+        const href = e.currentTarget.getAttribute('href') || '';
+        setOpen(false);
+        if (href.charAt(0) === '#') {
+          e.preventDefault();
+          const el = document.querySelector(href);
+          setTimeout(() => { if (!el) return; if (this.lenis) this.lenis.scrollTo(el, { offset: -90, immediate: false }); else window.scrollTo({ top: el.getBoundingClientRect().top + scrollY - 90, behavior: 'smooth' }); }, 60);
+        }
+      },
+      menuX: open ? 'translateX(0)' : 'translateX(-100%)',
+      menuVis: open ? 'visible' : 'hidden',
+      menuHidden: open ? 'false' : 'true',
+      menuTrans: open ? 'transform .6s cubic-bezier(.7,0,.2,1), visibility 0s linear 0s' : 'transform .5s cubic-bezier(.7,0,.2,1), visibility 0s linear .5s',
+      menuItemOp: open ? 1 : 0,
+      menuItemX: open ? 'none' : 'translateX(-24px)',
+      burgerTop: open ? 'translateY(3.5px) rotate(45deg)' : 'none',
+      burgerBot: open ? 'translateY(-3.5px) rotate(-45deg)' : 'none'
+    };
+  }
+  langVals() {
+    const cur = this.state.lang || (window.frGetLang && window.frGetLang()) || 'ES';
+    return {
+      langCode: cur, langOpen: !!this.state.langOpen,
+      langToggle: () => this.setState(st => ({ langOpen: !st.langOpen })),
+      langs: [['ES', 'Español'], ['EN', 'English'], ['PT', 'Português'], ['FR', 'Français']].map(([code, name]) => ({ code, name, bg: code === cur ? '#1E1A15' : 'transparent', fg: code === cur ? '#F7F3EC' : '#1E1A15', go: () => { this.setState({ lang: code, langOpen: false }); if (window.frSetLang) window.frSetLang(code); } }))
+    };
+  }
+  status() {
+    const mode = this.props.estado ?? 'auto';
+    let key = mode;
+    if (mode === 'auto') {
+      const parts = new Intl.DateTimeFormat('es-CL', { timeZone: 'America/Santiago', hour: 'numeric', minute: 'numeric', hourCycle: 'h23' }).formatToParts(new Date(this.state.now));
+      const h = +parts.find(p => p.type === 'hour').value, m = +parts.find(p => p.type === 'minute').value;
+      const t = h * 60 + m;
+      key = t >= 420 && t < 1230 ? 'abierto' : (t >= 300 && t < 1290 ? 'llevar' : 'cerrado');
+    }
+    return {
+      abierto: { label: 'Abierto · para llevar hasta 21:30', dotFill: '#5E8A4E' },
+      llevar: { label: 'Solo para llevar · hasta 21:30', dotFill: '#5E8A4E' },
+      cerrado: { label: 'Cerrado · abre a las 5:00', dotFill: 'transparent' }
+    }[key];
+  }
+
+  renderVals() {
+    const active = this.state.active;
+    const menu = MENU.map(([id, name, items]) => ({
+      id: 'cat-' + id, href: '#cat-' + id, name, count: items.length,
+      bg: active === id ? '#1E1A15' : 'transparent',
+      fg: active === id ? '#F7F3EC' : '#1E1A15',
+      go: (e) => {
+        e.preventDefault();
+        const el = document.getElementById('cat-' + id);
+        if (el && this.lenis) this.lenis.scrollTo(el, { offset: window.innerWidth < 861 ? -150 : -110 });
+        else if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 110, behavior: 'smooth' });
+        this.setState({ active: id });
+      },
+      items: items.map(([n, p, d]) => ({ n, p, d: d || '' }))
+    }));
+    return { ...this.langVals(), ...this.menuVals(),
+      heroRef: this.heroRef,
+      mapRef: this.mapRef,
+      heroLines: ({ ES: ['Panadería','artesanal','francesa','en el corazón','*del *desierto','*de *Atacama'], EN: ['French','artisan','bakery','in the heart','*of *the *Atacama','*Desert'], PT: ['Padaria','artesanal','francesa','no coração','*do *deserto','*do *Atacama'], FR: ['Boulangerie','artisanale','française','au cœur','*du *désert','*d’Atacama'] })[this.state.lang || (window.frGetLang && window.frGetLang()) || 'ES'].map(l => l.split(' ').map(t => ({ t: t.replace('*',''), it: t[0] === '*', rom: t[0] !== '*' }))),
+      menu,
+      carRef: this.carRef,
+      slides: SLIDES.map(([src, alt]) => ({ bg: 'url(' + src + ')', alt })),
+      slideDots: SLIDES.map((_, i) => ({ label: 'Ir a la foto ' + (i + 1), w: i === (this.state.slide || 0) ? '28px' : '8px', bg: i === (this.state.slide || 0) ? '#1E1A15' : 'rgba(30,26,21,.2)', go: () => this.carGo(i) })),
+      carPrev: () => this.carGo((this.state.slide || 0) - 1),
+      carNext: () => this.carGo((this.state.slide || 0) + 1),
+      carScroll: (e) => { const el = e.currentTarget; const w = el.children[0] ? el.children[0].offsetWidth + 16 : 1; const max = el.scrollWidth - el.clientWidth; const i = el.scrollLeft >= max - 4 ? SLIDES.length - 1 : Math.round(el.scrollLeft / w); if (i !== (this.state.slide || 0)) this.setState({ slide: i }); },
+      legalOpen: !!this.state.legal,
+      legalTitle: { terminos: 'Términos y condiciones', privacidad: 'Política de privacidad', cookies: 'Política de cookies' }[this.state.legal || 'terminos'],
+      legalTabs: [['terminos', 'Términos'], ['privacidad', 'Privacidad'], ['cookies', 'Cookies']].map(([k, label]) => ({ label, bg: this.state.legal === k ? '#1E1A15' : 'transparent', fg: this.state.legal === k ? '#F7F3EC' : '#1E1A15', go: () => this.setState({ legal: k }) })),
+      openTerminos: (e) => { e.preventDefault(); this.openLegal('terminos'); },
+      openPrivacidad: (e) => { e.preventDefault(); this.openLegal('privacidad'); },
+      openCookies: (e) => { e.preventDefault(); this.openLegal('cookies'); },
+      closeLegal: () => this.closeLegal(),
+      stopProp: (e) => e.stopPropagation(),
+      arthurRef: this.arthurRef,
+      arthurIn: () => this.setState({ arthurHover: true }),
+      arthurOut: () => this.setState({ arthurHover: false }),
+      arthurScale: this.state.arthurHover ? 'scale(1.06)' : 'scale(1)',
+      arthurOp: this.state.arthurHover ? 1 : 0,
+      ...this.mapVals(),
+      asideStuck: !!this.state.asideStuck,
+      status: this.status(),
+      posts: POSTS.map(([title, slot], i) => ({ title, slot, bgImg: 'url(assets/blog-' + (i + 1) + '.png)', meta: '00/00/0000 · Horarios y temporada' })),
+      showCookies: (this.props.avisoCookies ?? true) && this.state.cookies,
+      acceptCookies: () => this.setState({ cookies: false }),
+      onSubmit: (e) => { e.preventDefault(); this.setState({ sent: true }); },
+      formNote: this.state.sent ? 'Mensaje enviado. Te respondemos pronto.' : 'Respondemos en uno o dos días hábiles.'
+    };
+  }
+}
+</script>
+</body>
+</html>
