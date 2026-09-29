@@ -13,5 +13,6 @@ Requisitos
 Pendiente antes de publicar
 - Formulario de contacto: hoy solo muestra el mensaje de confirmación. Conectarlo a un servicio (Formspree, Netlify Forms o backend propio).
 - Textos legales, teléfono y correo del footer.
-- Fotos de productos de la carta y de las entradas del blog sin imagen.
+- Fotos de productos de la carta. Las entradas del blog de relleno usan fotos provisorias del sitio.
+- Enlace definitivo de la ficha de Google Business Profile (hoy es una URL de búsqueda).
 - Revisión nativa de traducciones (i18n.js) y, para SEO, publicar cada idioma en su propia URL.
